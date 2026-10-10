@@ -8,7 +8,7 @@ export const storyTreasureIsland: Story = {
   cefrLevel: 'CEFR A1+ / A2',
   gradeRange: 'Grades 4–5',
   estimatedMinutes: 8,
-  coverImage: '/src/assets/images/story_treasure_island_1791594173800.jpg',
+  coverImage: '/images/story_treasure_island_1791594173800.jpg',
   spineBg: 'bg-amber-900',
   spineBorder: 'border-amber-700',
   spineText: 'text-amber-50',

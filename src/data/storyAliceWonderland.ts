@@ -8,7 +8,7 @@ export const storyAliceWonderland: Story = {
   cefrLevel: 'CEFR A1+ / A2',
   gradeRange: 'Grades 4–5',
   estimatedMinutes: 8,
-  coverImage: '/src/assets/images/story_alice_wonderland_1791594184712.jpg',
+  coverImage: '/images/story_alice_wonderland_1791594184712.jpg',
   spineBg: 'bg-sky-900',
   spineBorder: 'border-sky-700',
   spineText: 'text-sky-50',

@@ -8,7 +8,7 @@ export const storyAroundWorld: Story = {
   cefrLevel: 'CEFR A1+ / A2',
   gradeRange: 'Grades 4–5',
   estimatedMinutes: 8,
-  coverImage: '/src/assets/images/story_around_world_1791594198699.jpg',
+  coverImage: '/images/story_around_world_1791594198699.jpg',
   spineBg: 'bg-indigo-950',
   spineBorder: 'border-indigo-700',
   spineText: 'text-indigo-50',

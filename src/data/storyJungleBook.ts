@@ -8,7 +8,7 @@ export const storyJungleBook: Story = {
   cefrLevel: 'CEFR A1+ / A2',
   gradeRange: 'Grades 4–5',
   estimatedMinutes: 8,
-  coverImage: '/src/assets/images/story_jungle_book_1791594209446.jpg',
+  coverImage: '/images/story_jungle_book_1791594209446.jpg',
   spineBg: 'bg-teal-950',
   spineBorder: 'border-teal-700',
   spineText: 'text-teal-50',

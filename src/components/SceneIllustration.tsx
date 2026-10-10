@@ -20,43 +20,43 @@ const SCENE_ARTWORK_MAP: Record<string, SceneArtworkConfig> = {
   // STORY 1: THE SECRET GARDEN (Scenes 1-10)
   // =========================================================================
   'secret-garden-1': {
-    src: '/src/assets/images/sg_scenes_1_to_4_1791605449548.jpg',
+    src: '/images/sg_scenes_1_to_4_1791605449548.jpg',
     quadrant: 'tl',
   },
   'secret-garden-2': {
-    src: '/src/assets/images/sg_scenes_1_to_4_1791605449548.jpg',
+    src: '/images/sg_scenes_1_to_4_1791605449548.jpg',
     quadrant: 'tr',
   },
   'secret-garden-3': {
-    src: '/src/assets/images/sg_scenes_1_to_4_1791605449548.jpg',
+    src: '/images/sg_scenes_1_to_4_1791605449548.jpg',
     quadrant: 'bl',
   },
   'secret-garden-4': {
-    src: '/src/assets/images/sg_scenes_1_to_4_1791605449548.jpg',
+    src: '/images/sg_scenes_1_to_4_1791605449548.jpg',
     quadrant: 'br',
   },
   'secret-garden-5': {
-    src: '/src/assets/images/sg_ti_extra_scenes_1791605755739.jpg',
+    src: '/images/sg_ti_extra_scenes_1791605755739.jpg',
     quadrant: 'tl',
   },
   'secret-garden-6': {
-    src: '/src/assets/images/sg_scenes_6_to_9_1791605463145.jpg',
+    src: '/images/sg_scenes_6_to_9_1791605463145.jpg',
     quadrant: 'tl',
   },
   'secret-garden-7': {
-    src: '/src/assets/images/sg_scenes_6_to_9_1791605463145.jpg',
+    src: '/images/sg_scenes_6_to_9_1791605463145.jpg',
     quadrant: 'tr',
   },
   'secret-garden-8': {
-    src: '/src/assets/images/sg_scenes_6_to_9_1791605463145.jpg',
+    src: '/images/sg_scenes_6_to_9_1791605463145.jpg',
     quadrant: 'bl',
   },
   'secret-garden-9': {
-    src: '/src/assets/images/sg_scenes_6_to_9_1791605463145.jpg',
+    src: '/images/sg_scenes_6_to_9_1791605463145.jpg',
     quadrant: 'br',
   },
   'secret-garden-10': {
-    src: '/src/assets/images/sg_ti_extra_scenes_1791605755739.jpg',
+    src: '/images/sg_ti_extra_scenes_1791605755739.jpg',
     quadrant: 'tr',
   },
 
@@ -64,43 +64,43 @@ const SCENE_ARTWORK_MAP: Record<string, SceneArtworkConfig> = {
   // STORY 2: TREASURE ISLAND (Scenes 1-10)
   // =========================================================================
   'treasure-island-1': {
-    src: '/src/assets/images/ti_scenes_1_3_4_6_1791605484213.jpg',
+    src: '/images/ti_scenes_1_3_4_6_1791605484213.jpg',
     quadrant: 'tl',
   },
   'treasure-island-2': {
-    src: '/src/assets/images/sg_ti_extra_scenes_1791605755739.jpg',
+    src: '/images/sg_ti_extra_scenes_1791605755739.jpg',
     quadrant: 'bl',
   },
   'treasure-island-3': {
-    src: '/src/assets/images/ti_scenes_1_3_4_6_1791605484213.jpg',
+    src: '/images/ti_scenes_1_3_4_6_1791605484213.jpg',
     quadrant: 'tr',
   },
   'treasure-island-4': {
-    src: '/src/assets/images/ti_scenes_1_3_4_6_1791605484213.jpg',
+    src: '/images/ti_scenes_1_3_4_6_1791605484213.jpg',
     quadrant: 'bl',
   },
   'treasure-island-5': {
-    src: '/src/assets/images/sg_ti_extra_scenes_1791605755739.jpg',
+    src: '/images/sg_ti_extra_scenes_1791605755739.jpg',
     quadrant: 'br',
   },
   'treasure-island-6': {
-    src: '/src/assets/images/ti_scenes_1_3_4_6_1791605484213.jpg',
+    src: '/images/ti_scenes_1_3_4_6_1791605484213.jpg',
     quadrant: 'br',
   },
   'treasure-island-7': {
-    src: '/src/assets/images/ti_scenes_7_to_10_1791605500326.jpg',
+    src: '/images/ti_scenes_7_to_10_1791605500326.jpg',
     quadrant: 'tl',
   },
   'treasure-island-8': {
-    src: '/src/assets/images/ti_scenes_7_to_10_1791605500326.jpg',
+    src: '/images/ti_scenes_7_to_10_1791605500326.jpg',
     quadrant: 'tr',
   },
   'treasure-island-9': {
-    src: '/src/assets/images/ti_scenes_7_to_10_1791605500326.jpg',
+    src: '/images/ti_scenes_7_to_10_1791605500326.jpg',
     quadrant: 'bl',
   },
   'treasure-island-10': {
-    src: '/src/assets/images/ti_scenes_7_to_10_1791605500326.jpg',
+    src: '/images/ti_scenes_7_to_10_1791605500326.jpg',
     quadrant: 'br',
   },
 
@@ -108,43 +108,43 @@ const SCENE_ARTWORK_MAP: Record<string, SceneArtworkConfig> = {
   // STORY 3: ALICE IN WONDERLAND (Scenes 1-10)
   // =========================================================================
   'alice-wonderland-1': {
-    src: '/src/assets/images/aw_scenes_1_to_4_1791605512045.jpg',
+    src: '/images/aw_scenes_1_to_4_1791605512045.jpg',
     quadrant: 'tl',
   },
   'alice-wonderland-2': {
-    src: '/src/assets/images/aw_scenes_1_to_4_1791605512045.jpg',
+    src: '/images/aw_scenes_1_to_4_1791605512045.jpg',
     quadrant: 'tr',
   },
   'alice-wonderland-3': {
-    src: '/src/assets/images/aw_scenes_1_to_4_1791605512045.jpg',
+    src: '/images/aw_scenes_1_to_4_1791605512045.jpg',
     quadrant: 'bl',
   },
   'alice-wonderland-4': {
-    src: '/src/assets/images/aw_scenes_1_to_4_1791605512045.jpg',
+    src: '/images/aw_scenes_1_to_4_1791605512045.jpg',
     quadrant: 'br',
   },
   'alice-wonderland-5': {
-    src: '/src/assets/images/aw_scenes_5_6_9_10_1791605523956.jpg',
+    src: '/images/aw_scenes_5_6_9_10_1791605523956.jpg',
     quadrant: 'tl',
   },
   'alice-wonderland-6': {
-    src: '/src/assets/images/aw_scenes_5_6_9_10_1791605523956.jpg',
+    src: '/images/aw_scenes_5_6_9_10_1791605523956.jpg',
     quadrant: 'tr',
   },
   'alice-wonderland-7': {
-    src: '/src/assets/images/aw_atw_extra_scenes_1791605769045.jpg',
+    src: '/images/aw_atw_extra_scenes_1791605769045.jpg',
     quadrant: 'tl',
   },
   'alice-wonderland-8': {
-    src: '/src/assets/images/aw_atw_extra_scenes_1791605769045.jpg',
+    src: '/images/aw_atw_extra_scenes_1791605769045.jpg',
     quadrant: 'tr',
   },
   'alice-wonderland-9': {
-    src: '/src/assets/images/aw_scenes_5_6_9_10_1791605523956.jpg',
+    src: '/images/aw_scenes_5_6_9_10_1791605523956.jpg',
     quadrant: 'bl',
   },
   'alice-wonderland-10': {
-    src: '/src/assets/images/aw_scenes_5_6_9_10_1791605523956.jpg',
+    src: '/images/aw_scenes_5_6_9_10_1791605523956.jpg',
     quadrant: 'br',
   },
 
@@ -152,43 +152,43 @@ const SCENE_ARTWORK_MAP: Record<string, SceneArtworkConfig> = {
   // STORY 4: AROUND THE WORLD IN 80 DAYS (Scenes 1-10)
   // =========================================================================
   'around-world-1': {
-    src: '/src/assets/images/atw_scenes_1_to_4_1791605538862.jpg',
+    src: '/images/atw_scenes_1_to_4_1791605538862.jpg',
     quadrant: 'tl',
   },
   'around-world-2': {
-    src: '/src/assets/images/atw_scenes_1_to_4_1791605538862.jpg',
+    src: '/images/atw_scenes_1_to_4_1791605538862.jpg',
     quadrant: 'tr',
   },
   'around-world-3': {
-    src: '/src/assets/images/atw_scenes_1_to_4_1791605538862.jpg',
+    src: '/images/atw_scenes_1_to_4_1791605538862.jpg',
     quadrant: 'bl',
   },
   'around-world-4': {
-    src: '/src/assets/images/atw_scenes_1_to_4_1791605538862.jpg',
+    src: '/images/atw_scenes_1_to_4_1791605538862.jpg',
     quadrant: 'br',
   },
   'around-world-5': {
-    src: '/src/assets/images/atw_scenes_5_7_8_9_1791605550224.jpg',
+    src: '/images/atw_scenes_5_7_8_9_1791605550224.jpg',
     quadrant: 'tl',
   },
   'around-world-6': {
-    src: '/src/assets/images/aw_atw_extra_scenes_1791605769045.jpg',
+    src: '/images/aw_atw_extra_scenes_1791605769045.jpg',
     quadrant: 'bl',
   },
   'around-world-7': {
-    src: '/src/assets/images/atw_scenes_5_7_8_9_1791605550224.jpg',
+    src: '/images/atw_scenes_5_7_8_9_1791605550224.jpg',
     quadrant: 'tr',
   },
   'around-world-8': {
-    src: '/src/assets/images/atw_scenes_5_7_8_9_1791605550224.jpg',
+    src: '/images/atw_scenes_5_7_8_9_1791605550224.jpg',
     quadrant: 'bl',
   },
   'around-world-9': {
-    src: '/src/assets/images/jb_scenes_7_10_1791605854792.jpg',
+    src: '/images/jb_scenes_7_10_1791605854792.jpg',
     quadrant: 'br',
   },
   'around-world-10': {
-    src: '/src/assets/images/aw_atw_extra_scenes_1791605769045.jpg',
+    src: '/images/aw_atw_extra_scenes_1791605769045.jpg',
     quadrant: 'br',
   },
 
@@ -196,43 +196,43 @@ const SCENE_ARTWORK_MAP: Record<string, SceneArtworkConfig> = {
   // STORY 5: THE JUNGLE BOOK (Scenes 1-10)
   // =========================================================================
   'jungle-book-1': {
-    src: '/src/assets/images/jb_scenes_1_to_4_1791605833571.jpg',
+    src: '/images/jb_scenes_1_to_4_1791605833571.jpg',
     quadrant: 'tl',
   },
   'jungle-book-2': {
-    src: '/src/assets/images/jb_scenes_1_to_4_1791605833571.jpg',
+    src: '/images/jb_scenes_1_to_4_1791605833571.jpg',
     quadrant: 'tr',
   },
   'jungle-book-3': {
-    src: '/src/assets/images/jb_scenes_1_to_4_1791605833571.jpg',
+    src: '/images/jb_scenes_1_to_4_1791605833571.jpg',
     quadrant: 'bl',
   },
   'jungle-book-4': {
-    src: '/src/assets/images/jb_scenes_1_to_4_1791605833571.jpg',
+    src: '/images/jb_scenes_1_to_4_1791605833571.jpg',
     quadrant: 'br',
   },
   'jungle-book-5': {
-    src: '/src/assets/images/jb_scenes_5_6_8_9_1791605893782.jpg',
+    src: '/images/jb_scenes_5_6_8_9_1791605893782.jpg',
     quadrant: 'tl',
   },
   'jungle-book-6': {
-    src: '/src/assets/images/jb_scenes_5_6_8_9_1791605893782.jpg',
+    src: '/images/jb_scenes_5_6_8_9_1791605893782.jpg',
     quadrant: 'tr',
   },
   'jungle-book-7': {
-    src: '/src/assets/images/jb_scenes_7_10_1791605854792.jpg',
+    src: '/images/jb_scenes_7_10_1791605854792.jpg',
     quadrant: 'tl',
   },
   'jungle-book-8': {
-    src: '/src/assets/images/jb_scenes_5_6_8_9_1791605893782.jpg',
+    src: '/images/jb_scenes_5_6_8_9_1791605893782.jpg',
     quadrant: 'bl',
   },
   'jungle-book-9': {
-    src: '/src/assets/images/jb_scenes_5_6_8_9_1791605893782.jpg',
+    src: '/images/jb_scenes_5_6_8_9_1791605893782.jpg',
     quadrant: 'br',
   },
   'jungle-book-10': {
-    src: '/src/assets/images/jb_scenes_7_10_1791605854792.jpg',
+    src: '/images/jb_scenes_7_10_1791605854792.jpg',
     quadrant: 'tr',
   },
 };

@@ -8,7 +8,7 @@ export const storySecretGarden: Story = {
   cefrLevel: 'CEFR A1+ / A2',
   gradeRange: 'Grades 4–5',
   estimatedMinutes: 8,
-  coverImage: '/src/assets/images/story_secret_garden_1791594160406.jpg',
+  coverImage: '/images/story_secret_garden_1791594160406.jpg',
   spineBg: 'bg-emerald-900',
   spineBorder: 'border-emerald-700',
   spineText: 'text-emerald-50',
