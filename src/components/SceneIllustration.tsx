@@ -1,5 +1,6 @@
 import React from 'react';
 import { Scene, Story } from '../types/story';
+import { resolveArtworkUrl } from '../data/embeddedArtwork';
 
 interface SceneIllustrationProps {
   story: Story;
@@ -267,7 +268,7 @@ export const SceneIllustration: React.FC<SceneIllustrationProps> = ({
         {/* 16:9 Cartoon Storybook Scene Canvas */}
         <div className="relative aspect-[16/9] w-full overflow-hidden bg-amber-100">
           <img
-            src={artwork.src}
+            src={resolveArtworkUrl(artwork.src)}
             alt={scene.sceneVisual.caption}
             referrerPolicy="no-referrer"
             className={`

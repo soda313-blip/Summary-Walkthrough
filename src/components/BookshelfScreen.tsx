@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { BookOpen, CheckCircle2, Volume2, Square } from 'lucide-react';
 import { Story } from '../types/story';
 import { StoryMode } from '../data/stories';
+import { resolveArtworkUrl } from '../data/embeddedArtwork';
 import { soundManager } from '../utils/soundEffects';
 
 interface BookshelfScreenProps {
@@ -89,7 +90,7 @@ export const BookshelfScreen: React.FC<BookshelfScreenProps> = ({
         <div className="my-1 relative h-20 sm:h-24 w-full overflow-hidden rounded-md border border-white/20 bg-black/30">
           {!imgErrors[story.id] ? (
             <img
-              src={story.coverImage}
+              src={resolveArtworkUrl(story.coverImage)}
               alt={story.title}
               referrerPolicy="no-referrer"
               onError={() =>
@@ -178,7 +179,7 @@ export const BookshelfScreen: React.FC<BookshelfScreenProps> = ({
               <div className="mt-4 overflow-hidden rounded-xl border border-amber-200/70 bg-stone-900 aspect-[4/3]">
                 {!imgErrors[selectedStory.id] ? (
                   <img
-                    src={selectedStory.coverImage}
+                    src={resolveArtworkUrl(selectedStory.coverImage)}
                     alt={selectedStory.title}
                     referrerPolicy="no-referrer"
                     onError={() =>
