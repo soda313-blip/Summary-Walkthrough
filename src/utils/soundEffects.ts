@@ -1,4 +1,4 @@
-// Web Audio API Synthesizer for Trumpet Fanfare, UI Feedback, and Word Speech
+// Web Audio API Synthesizer for Trumpet Fanfare, UI Feedback, and Read-Aloud Speech
 
 class SoundManager {
   private ctx: AudioContext | null = null;
@@ -7,7 +7,10 @@ class SoundManager {
   private getContext(): AudioContext | null {
     if (!this.enabled || typeof window === 'undefined') return null;
     if (!this.ctx) {
-      const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      const AudioCtx =
+        window.AudioContext ||
+        (window as unknown as { webkitAudioContext: typeof AudioContext })
+          .webkitAudioContext;
       if (AudioCtx) {
         this.ctx = new AudioCtx();
       }
@@ -98,11 +101,10 @@ class SoundManager {
     if (!ctx) return;
 
     const now = ctx.currentTime;
-    // Royal Trumpet Fanfare: G4, C5, E5, G5 (short), E5 (short), G5 (long held chord)
     const melody = [
       { freq: 392.0, harmony: 261.63, start: 0.0, duration: 0.14 },
       { freq: 523.25, harmony: 329.63, start: 0.15, duration: 0.14 },
-      { freq: 659.25, harmony: 392.0, start: 0.30, duration: 0.14 },
+      { freq: 659.25, harmony: 392.0, start: 0.3, duration: 0.14 },
       { freq: 783.99, harmony: 523.25, start: 0.45, duration: 0.24 },
       { freq: 659.25, harmony: 392.0, start: 0.72, duration: 0.14 },
       { freq: 783.99, harmony: 523.25, start: 0.88, duration: 0.65 },
@@ -110,7 +112,6 @@ class SoundManager {
 
     melody.forEach(({ freq, harmony, start, duration }) => {
       const noteStart = now + start;
-      // Lead brass voice (sawtooth + lowpass filter for warm brass timbre)
       const oscLead = ctx.createOscillator();
       const oscHarmony = ctx.createOscillator();
       const filter = ctx.createBiquadFilter();
@@ -122,13 +123,11 @@ class SoundManager {
       oscLead.frequency.setValueAtTime(freq, noteStart);
       oscHarmony.frequency.setValueAtTime(harmony, noteStart);
 
-      // Brass filter envelope
       filter.type = 'lowpass';
       filter.frequency.setValueAtTime(900, noteStart);
       filter.frequency.linearRampToValueAtTime(2400, noteStart + 0.04);
       filter.frequency.exponentialRampToValueAtTime(1400, noteStart + duration);
 
-      // Brass amplitude envelope
       gain.gain.setValueAtTime(0.001, noteStart);
       gain.gain.linearRampToValueAtTime(0.11, noteStart + 0.025);
       gain.gain.setValueAtTime(0.09, noteStart + duration * 0.7);
@@ -146,17 +145,35 @@ class SoundManager {
     });
   }
 
-  public speakWord(text: string): void {
+  public stopSpeaking(): void {
     if (typeof window === 'undefined' || !('speechSynthesis' in window)) return;
+    try {
+      window.speechSynthesis.cancel();
+    } catch {
+      // Ignore
+    }
+  }
+
+  public speakWord(text: string, onEnd?: () => void): void {
+    if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
+      if (onEnd) onEnd();
+      return;
+    }
     try {
       window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = 'en-US';
-      utterance.rate = 0.9;
+      utterance.rate = 0.92;
       utterance.pitch = 1.0;
+      utterance.onend = () => {
+        if (onEnd) onEnd();
+      };
+      utterance.onerror = () => {
+        if (onEnd) onEnd();
+      };
       window.speechSynthesis.speak(utterance);
     } catch {
-      // Ignore if speechSynthesis is restricted
+      if (onEnd) onEnd();
     }
   }
 }

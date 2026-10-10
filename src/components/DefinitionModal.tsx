@@ -43,7 +43,7 @@ export const DefinitionModal: React.FC<DefinitionModalProps> = ({
       onClick={onClose}
     >
       <div
-        className="w-full max-w-lg rounded-t-3xl sm:rounded-2xl bg-white border border-slate-200 p-5 sm:p-6 shadow-xl transition-transform duration-150"
+        className="w-full max-w-lg rounded-t-3xl sm:rounded-2xl bg-[#FFFDF9] border border-amber-200 p-5 sm:p-6 shadow-xl transition-transform duration-150"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Mobile drag handle */}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Scene, Story } from '../types/story';
 
 interface SceneIllustrationProps {
@@ -8,108 +8,252 @@ interface SceneIllustrationProps {
   onTapIllustration: () => void;
 }
 
-// Camera focal positions across 15 scenes so each scene frames a distinct part of the artwork
-const SCENE_FOCAL_POSITIONS: string[] = [
-  'center 50%',
-  'left 35%',
-  'right 40%',
-  'center 25%',
-  'left 65%',
-  'center 55%',
-  'right 60%',
-  'center 40%',
-  'left 45%',
-  'right 30%',
-  'center 70%',
-  'left 25%',
-  'right 55%',
-  'center 35%',
-  'center 50%',
-];
+type Quadrant = 'tl' | 'tr' | 'bl' | 'br' | 'full';
+
+interface SceneArtworkConfig {
+  src: string;
+  quadrant: Quadrant;
+}
+
+const SCENE_ARTWORK_MAP: Record<string, SceneArtworkConfig> = {
+  // =========================================================================
+  // STORY 1: THE SECRET GARDEN (Scenes 1-10)
+  // =========================================================================
+  'secret-garden-1': {
+    src: '/src/assets/images/sg_scenes_1_to_4_1791605449548.jpg',
+    quadrant: 'tl',
+  },
+  'secret-garden-2': {
+    src: '/src/assets/images/sg_scenes_1_to_4_1791605449548.jpg',
+    quadrant: 'tr',
+  },
+  'secret-garden-3': {
+    src: '/src/assets/images/sg_scenes_1_to_4_1791605449548.jpg',
+    quadrant: 'bl',
+  },
+  'secret-garden-4': {
+    src: '/src/assets/images/sg_scenes_1_to_4_1791605449548.jpg',
+    quadrant: 'br',
+  },
+  'secret-garden-5': {
+    src: '/src/assets/images/sg_ti_extra_scenes_1791605755739.jpg',
+    quadrant: 'tl',
+  },
+  'secret-garden-6': {
+    src: '/src/assets/images/sg_scenes_6_to_9_1791605463145.jpg',
+    quadrant: 'tl',
+  },
+  'secret-garden-7': {
+    src: '/src/assets/images/sg_scenes_6_to_9_1791605463145.jpg',
+    quadrant: 'tr',
+  },
+  'secret-garden-8': {
+    src: '/src/assets/images/sg_scenes_6_to_9_1791605463145.jpg',
+    quadrant: 'bl',
+  },
+  'secret-garden-9': {
+    src: '/src/assets/images/sg_scenes_6_to_9_1791605463145.jpg',
+    quadrant: 'br',
+  },
+  'secret-garden-10': {
+    src: '/src/assets/images/sg_ti_extra_scenes_1791605755739.jpg',
+    quadrant: 'tr',
+  },
+
+  // =========================================================================
+  // STORY 2: TREASURE ISLAND (Scenes 1-10)
+  // =========================================================================
+  'treasure-island-1': {
+    src: '/src/assets/images/ti_scenes_1_3_4_6_1791605484213.jpg',
+    quadrant: 'tl',
+  },
+  'treasure-island-2': {
+    src: '/src/assets/images/sg_ti_extra_scenes_1791605755739.jpg',
+    quadrant: 'bl',
+  },
+  'treasure-island-3': {
+    src: '/src/assets/images/ti_scenes_1_3_4_6_1791605484213.jpg',
+    quadrant: 'tr',
+  },
+  'treasure-island-4': {
+    src: '/src/assets/images/ti_scenes_1_3_4_6_1791605484213.jpg',
+    quadrant: 'bl',
+  },
+  'treasure-island-5': {
+    src: '/src/assets/images/sg_ti_extra_scenes_1791605755739.jpg',
+    quadrant: 'br',
+  },
+  'treasure-island-6': {
+    src: '/src/assets/images/ti_scenes_1_3_4_6_1791605484213.jpg',
+    quadrant: 'br',
+  },
+  'treasure-island-7': {
+    src: '/src/assets/images/ti_scenes_7_to_10_1791605500326.jpg',
+    quadrant: 'tl',
+  },
+  'treasure-island-8': {
+    src: '/src/assets/images/ti_scenes_7_to_10_1791605500326.jpg',
+    quadrant: 'tr',
+  },
+  'treasure-island-9': {
+    src: '/src/assets/images/ti_scenes_7_to_10_1791605500326.jpg',
+    quadrant: 'bl',
+  },
+  'treasure-island-10': {
+    src: '/src/assets/images/ti_scenes_7_to_10_1791605500326.jpg',
+    quadrant: 'br',
+  },
+
+  // =========================================================================
+  // STORY 3: ALICE IN WONDERLAND (Scenes 1-10)
+  // =========================================================================
+  'alice-wonderland-1': {
+    src: '/src/assets/images/aw_scenes_1_to_4_1791605512045.jpg',
+    quadrant: 'tl',
+  },
+  'alice-wonderland-2': {
+    src: '/src/assets/images/aw_scenes_1_to_4_1791605512045.jpg',
+    quadrant: 'tr',
+  },
+  'alice-wonderland-3': {
+    src: '/src/assets/images/aw_scenes_1_to_4_1791605512045.jpg',
+    quadrant: 'bl',
+  },
+  'alice-wonderland-4': {
+    src: '/src/assets/images/aw_scenes_1_to_4_1791605512045.jpg',
+    quadrant: 'br',
+  },
+  'alice-wonderland-5': {
+    src: '/src/assets/images/aw_scenes_5_6_9_10_1791605523956.jpg',
+    quadrant: 'tl',
+  },
+  'alice-wonderland-6': {
+    src: '/src/assets/images/aw_scenes_5_6_9_10_1791605523956.jpg',
+    quadrant: 'tr',
+  },
+  'alice-wonderland-7': {
+    src: '/src/assets/images/aw_atw_extra_scenes_1791605769045.jpg',
+    quadrant: 'tl',
+  },
+  'alice-wonderland-8': {
+    src: '/src/assets/images/aw_atw_extra_scenes_1791605769045.jpg',
+    quadrant: 'tr',
+  },
+  'alice-wonderland-9': {
+    src: '/src/assets/images/aw_scenes_5_6_9_10_1791605523956.jpg',
+    quadrant: 'bl',
+  },
+  'alice-wonderland-10': {
+    src: '/src/assets/images/aw_scenes_5_6_9_10_1791605523956.jpg',
+    quadrant: 'br',
+  },
+
+  // =========================================================================
+  // STORY 4: AROUND THE WORLD IN 80 DAYS (Scenes 1-10)
+  // =========================================================================
+  'around-world-1': {
+    src: '/src/assets/images/atw_scenes_1_to_4_1791605538862.jpg',
+    quadrant: 'tl',
+  },
+  'around-world-2': {
+    src: '/src/assets/images/atw_scenes_1_to_4_1791605538862.jpg',
+    quadrant: 'tr',
+  },
+  'around-world-3': {
+    src: '/src/assets/images/atw_scenes_1_to_4_1791605538862.jpg',
+    quadrant: 'bl',
+  },
+  'around-world-4': {
+    src: '/src/assets/images/atw_scenes_1_to_4_1791605538862.jpg',
+    quadrant: 'br',
+  },
+  'around-world-5': {
+    src: '/src/assets/images/atw_scenes_5_7_8_9_1791605550224.jpg',
+    quadrant: 'tl',
+  },
+  'around-world-6': {
+    src: '/src/assets/images/aw_atw_extra_scenes_1791605769045.jpg',
+    quadrant: 'bl',
+  },
+  'around-world-7': {
+    src: '/src/assets/images/atw_scenes_5_7_8_9_1791605550224.jpg',
+    quadrant: 'tr',
+  },
+  'around-world-8': {
+    src: '/src/assets/images/atw_scenes_5_7_8_9_1791605550224.jpg',
+    quadrant: 'bl',
+  },
+  'around-world-9': {
+    src: '/src/assets/images/jb_scenes_7_10_1791605854792.jpg',
+    quadrant: 'br',
+  },
+  'around-world-10': {
+    src: '/src/assets/images/aw_atw_extra_scenes_1791605769045.jpg',
+    quadrant: 'br',
+  },
+
+  // =========================================================================
+  // STORY 5: THE JUNGLE BOOK (Scenes 1-10)
+  // =========================================================================
+  'jungle-book-1': {
+    src: '/src/assets/images/jb_scenes_1_to_4_1791605833571.jpg',
+    quadrant: 'tl',
+  },
+  'jungle-book-2': {
+    src: '/src/assets/images/jb_scenes_1_to_4_1791605833571.jpg',
+    quadrant: 'tr',
+  },
+  'jungle-book-3': {
+    src: '/src/assets/images/jb_scenes_1_to_4_1791605833571.jpg',
+    quadrant: 'bl',
+  },
+  'jungle-book-4': {
+    src: '/src/assets/images/jb_scenes_1_to_4_1791605833571.jpg',
+    quadrant: 'br',
+  },
+  'jungle-book-5': {
+    src: '/src/assets/images/jb_scenes_5_6_8_9_1791605893782.jpg',
+    quadrant: 'tl',
+  },
+  'jungle-book-6': {
+    src: '/src/assets/images/jb_scenes_5_6_8_9_1791605893782.jpg',
+    quadrant: 'tr',
+  },
+  'jungle-book-7': {
+    src: '/src/assets/images/jb_scenes_7_10_1791605854792.jpg',
+    quadrant: 'tl',
+  },
+  'jungle-book-8': {
+    src: '/src/assets/images/jb_scenes_5_6_8_9_1791605893782.jpg',
+    quadrant: 'bl',
+  },
+  'jungle-book-9': {
+    src: '/src/assets/images/jb_scenes_5_6_8_9_1791605893782.jpg',
+    quadrant: 'br',
+  },
+  'jungle-book-10': {
+    src: '/src/assets/images/jb_scenes_7_10_1791605854792.jpg',
+    quadrant: 'tr',
+  },
+};
+
+const QUADRANT_POSITION_CLASSES: Record<Quadrant, string> = {
+  tl: 'w-[208%] h-[208%] max-w-none -top-[2%] -left-[2%]',
+  tr: 'w-[208%] h-[208%] max-w-none -top-[2%] -right-[2%]',
+  bl: 'w-[208%] h-[208%] max-w-none -bottom-[2%] -left-[2%]',
+  br: 'w-[208%] h-[208%] max-w-none -bottom-[2%] -right-[2%]',
+  full: 'w-full h-full inset-0 object-cover',
+};
 
 export const SceneIllustration: React.FC<SceneIllustrationProps> = ({
   story,
   scene,
   onTapIllustration,
 }) => {
-  const [imgError, setImgError] = useState(false);
-  const focalPos = SCENE_FOCAL_POSITIONS[(scene.id - 1) % SCENE_FOCAL_POSITIONS.length];
-
-  const renderMotifSvg = (motif: Scene['sceneVisual']['motif']) => {
-    switch (motif) {
-      case 'key':
-        return (
-          <svg viewBox="0 0 48 48" className="w-8 h-8 text-amber-200" fill="none" stroke="currentColor" strokeWidth="2.5">
-            <circle cx="16" cy="24" r="8" />
-            <path d="M24 24h18M36 24v6M42 24v8" strokeLinecap="round" />
-          </svg>
-        );
-      case 'robin':
-        return (
-          <svg viewBox="0 0 48 48" className="w-8 h-8 text-amber-200" fill="none" stroke="currentColor" strokeWidth="2.5">
-            <path d="M12 30c0-8 7-14 15-14 5 0 9 3 11 7l4 2-4 2c-1 6-6 10-13 10H12z" />
-            <path d="M20 37v6M28 37v6" strokeLinecap="round" />
-            <circle cx="30" cy="22" r="1.5" fill="currentColor" />
-          </svg>
-        );
-      case 'sprout':
-      case 'bloom':
-      case 'roses':
-        return (
-          <svg viewBox="0 0 48 48" className="w-8 h-8 text-emerald-200" fill="none" stroke="currentColor" strokeWidth="2.5">
-            <path d="M24 40V20" strokeLinecap="round" />
-            <path d="M24 28c-8 0-12-6-12-12 8 0 12 6 12 12z" />
-            <path d="M24 22c8 0 12-6 12-12-8 0-12 6-12 12z" />
-          </svg>
-        );
-      case 'map':
-      case 'island':
-        return (
-          <svg viewBox="0 0 48 48" className="w-8 h-8 text-amber-200" fill="none" stroke="currentColor" strokeWidth="2.5">
-            <path d="M8 12l10-4 12 4 10-4v28l-10 4-12-4-10 4V12z" strokeLinejoin="round" />
-            <path d="M22 20l6 6M28 20l-6 6" strokeLinecap="round" />
-          </svg>
-        );
-      case 'ship':
-      case 'steamer':
-        return (
-          <svg viewBox="0 0 48 48" className="w-8 h-8 text-sky-200" fill="none" stroke="currentColor" strokeWidth="2.5">
-            <path d="M8 32h32l-4 8H12l-4-8z" strokeLinejoin="round" />
-            <path d="M24 10v22M24 12l12 16H24" strokeLinejoin="round" />
-          </svg>
-        );
-      case 'watch':
-      case 'clock':
-      case 'compass':
-        return (
-          <svg viewBox="0 0 48 48" className="w-8 h-8 text-amber-200" fill="none" stroke="currentColor" strokeWidth="2.5">
-            <circle cx="24" cy="26" r="14" />
-            <path d="M24 18v8l5 4M20 8h8" strokeLinecap="round" />
-          </svg>
-        );
-      case 'train':
-        return (
-          <svg viewBox="0 0 48 48" className="w-8 h-8 text-amber-200" fill="none" stroke="currentColor" strokeWidth="2.5">
-            <rect x="8" y="16" width="32" height="16" rx="3" />
-            <circle cx="16" cy="36" r="4" />
-            <circle cx="32" cy="36" r="4" />
-            <path d="M32 16V10h6" strokeLinecap="round" />
-          </svg>
-        );
-      case 'fire':
-        return (
-          <svg viewBox="0 0 48 48" className="w-8 h-8 text-orange-200" fill="none" stroke="currentColor" strokeWidth="2.5">
-            <path d="M24 8c6 8 12 13 12 21a12 12 0 01-24 0c0-8 6-13 12-21z" />
-          </svg>
-        );
-      default:
-        return (
-          <svg viewBox="0 0 48 48" className="w-8 h-8 text-amber-200" fill="none" stroke="currentColor" strokeWidth="2.5">
-            <path d="M10 12h28v24H10z" />
-            <path d="M16 20h16M16 26h10" strokeLinecap="round" />
-          </svg>
-        );
-    }
+  const sceneKey = `${story.id}-${scene.id}`;
+  const artwork: SceneArtworkConfig = SCENE_ARTWORK_MAP[sceneKey] || {
+    src: story.coverImage,
+    quadrant: 'full',
   };
 
   return (
@@ -117,55 +261,30 @@ export const SceneIllustration: React.FC<SceneIllustrationProps> = ({
       <button
         type="button"
         onClick={onTapIllustration}
-        className="group relative w-full overflow-hidden rounded-2xl border border-slate-200 bg-slate-900 text-left shadow-sm transition-transform duration-150 active:scale-[0.99] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-900 cursor-pointer"
-        aria-label={`Scene illustration: ${scene.sceneVisual.caption}. Tap to open vocabulary definition for ${scene.sceneVisual.focusWord}.`}
+        aria-label={`Scene illustration: ${scene.sceneVisual.caption}. Tap to see definition for ${scene.sceneVisual.focusWord}`}
+        className="group relative w-full overflow-hidden rounded-xl border-2 border-amber-300/90 bg-amber-950 text-left shadow-md transition-all hover:border-amber-600 focus:outline-none focus:ring-2 focus:ring-amber-700"
       >
-        <div className="relative aspect-[16/10] sm:aspect-[16/9] w-full overflow-hidden bg-slate-800">
-          {!imgError ? (
-            <img
-              src={story.coverImage}
-              alt={scene.sceneVisual.caption}
-              referrerPolicy="no-referrer"
-              onError={() => setImgError(true)}
-              style={{
-                objectPosition: focalPos,
-                transform: `scale(${1.04 + ((scene.id % 4) * 0.03)})`,
-              }}
-              className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-110"
-            />
-          ) : (
-            <div className="flex h-full w-full flex-col items-center justify-center bg-gradient-to-br from-slate-800 via-slate-900 to-slate-950 p-6 text-center text-white">
-              {renderMotifSvg(scene.sceneVisual.motif)}
-              <p className="mt-2 font-serif-display text-lg font-semibold">
-                {scene.title}
-              </p>
-            </div>
-          )}
+        {/* 16:9 Cartoon Storybook Scene Canvas */}
+        <div className="relative aspect-[16/9] w-full overflow-hidden bg-amber-100">
+          <img
+            src={artwork.src}
+            alt={scene.sceneVisual.caption}
+            referrerPolicy="no-referrer"
+            className={`
+              pointer-events-none absolute select-none transition-transform duration-300 group-hover:scale-[1.02]
+              ${QUADRANT_POSITION_CLASSES[artwork.quadrant]}
+            `}
+          />
+        </div>
 
-          {/* Measured contrast scrim for 4.5:1 text legibility */}
-          <div className=" inset-0 absolute bg-gradient-to-t from-black/85 via-black/35 to-black/15" />
-
-          {/* Top-right interactive vocabulary hint affordance */}
-          <div className="absolute top-3 right-3 flex items-center gap-2 rounded-lg bg-slate-950/75 px-3 py-1.5 text-xs font-medium text-white backdrop-blur-md border border-white/15">
-            <span className="underline decoration-amber-400 decoration-2 underline-offset-2">
-              Tap picture for word clue: &ldquo;{scene.sceneVisual.focusWord}&rdquo;
-            </span>
-          </div>
-
-          {/* Bottom scene illustration caption & custom motif vignette */}
-          <div className="absolute bottom-0 left-0 right-0 flex items-end justify-between gap-4 p-4 sm:p-5">
-            <div className="min-w-0 flex-1">
-              <p className="text-xs font-medium text-amber-300/95">
-                {scene.title}
-              </p>
-              <p className="mt-0.5 text-sm sm:text-base font-medium text-white leading-snug">
-                {scene.sceneVisual.caption}
-              </p>
-            </div>
-            <div className="hidden sm:flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-white/10 backdrop-blur-md border border-white/15">
-              {renderMotifSvg(scene.sceneVisual.motif)}
-            </div>
-          </div>
+        {/* Bottom Caption Bar with Tap-to-Define Prompt */}
+        <div className="flex flex-wrap items-center justify-between gap-2 border-t border-amber-200 bg-[#FFFDF7] px-3.5 py-2.5">
+          <p className="text-xs sm:text-sm font-medium text-amber-950 leading-snug">
+            {scene.sceneVisual.caption}
+          </p>
+          <span className="shrink-0 rounded-md border border-amber-300 bg-amber-100/90 px-2.5 py-1 text-xs font-bold text-amber-950 group-hover:bg-amber-800 group-hover:text-white group-hover:border-amber-800 transition-colors">
+            Tap picture: &ldquo;{scene.sceneVisual.focusWord}&rdquo;
+          </span>
         </div>
       </button>
     </div>

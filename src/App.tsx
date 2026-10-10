@@ -4,7 +4,7 @@
  */
 
 import React, { useState, useEffect } from 'react';
-import { STORIES } from './data/stories';
+import { STORIES, StoryMode } from './data/stories';
 import { SceneAttemptRecord, Story } from './types/story';
 import { BookshelfScreen } from './components/BookshelfScreen';
 import { InteractiveStoryScreen } from './components/InteractiveStoryScreen';
@@ -17,15 +17,15 @@ type AppScreen = 'shelf' | 'story' | 'reflection';
 
 export default function App() {
   const [selectedStoryId, setSelectedStoryId] = useState<string>('secret-garden');
+  const [selectedMode, setSelectedMode] = useState<StoryMode>('quiz');
   const [screen, setScreen] = useState<AppScreen>('shelf');
   const [sceneIndex, setSceneIndex] = useState<number>(0);
 
-  // Track scene attempt outcomes per story for the personalized discussion prompt generator
   const [attemptsByStory, setAttemptsByStory] = useState<
     Record<string, SceneAttemptRecord[]>
   >(() => {
     try {
-      const saved = localStorage.getItem('sw_attempts_v1');
+      const saved = localStorage.getItem('sw_attempts_v2');
       return saved ? JSON.parse(saved) : {};
     } catch {
       return {};
@@ -34,7 +34,7 @@ export default function App() {
 
   const [completedStories, setCompletedStories] = useState<string[]>(() => {
     try {
-      const saved = localStorage.getItem('sw_completed_v1');
+      const saved = localStorage.getItem('sw_completed_v2');
       return saved ? JSON.parse(saved) : [];
     } catch {
       return [];
@@ -47,24 +47,23 @@ export default function App() {
 
   useEffect(() => {
     try {
-      localStorage.setItem('sw_attempts_v1', JSON.stringify(attemptsByStory));
+      localStorage.setItem('sw_attempts_v2', JSON.stringify(attemptsByStory));
     } catch {
-      // Ignore storage quota errors
+      // Ignore storage errors
     }
   }, [attemptsByStory]);
 
   useEffect(() => {
     try {
-      localStorage.setItem('sw_completed_v1', JSON.stringify(completedStories));
+      localStorage.setItem('sw_completed_v2', JSON.stringify(completedStories));
     } catch {
-      // Ignore storage quota errors
+      // Ignore storage errors
     }
   }, [completedStories]);
 
   const activeStory: Story =
     STORIES.find((s) => s.id === selectedStoryId) || STORIES[0];
 
-  // Calculate how many scenes have been completed in each story for shelf progress display
   const storyProgressMap: Record<string, number> = {};
   STORIES.forEach((st) => {
     const records = attemptsByStory[st.id] || [];
@@ -75,22 +74,34 @@ export default function App() {
     const nextState = !soundEnabled;
     setSoundEnabled(nextState);
     soundManager.enabled = nextState;
+    if (!nextState) {
+      soundManager.stopSpeaking();
+    }
   };
 
-  const handleStartStory = (story: Story) => {
+  const handleStartStory = (story: Story, mode: StoryMode) => {
+    soundManager.stopSpeaking();
     setSelectedStoryId(story.id);
-    const existingRecords = attemptsByStory[story.id] || [];
-    // If partially completed (and not all 15 done), resume at the next unfinished scene; otherwise start fresh at Scene 1
-    if (existingRecords.length > 0 && existingRecords.length < story.scenes.length) {
-      setSceneIndex(existingRecords.length);
+    setSelectedMode(mode);
+
+    if (mode === 'quiz') {
+      const existingRecords = attemptsByStory[story.id] || [];
+      if (
+        existingRecords.length > 0 &&
+        existingRecords.length < story.scenes.length
+      ) {
+        setSceneIndex(existingRecords.length);
+      } else {
+        setAttemptsByStory((prev) => ({
+          ...prev,
+          [story.id]: [],
+        }));
+        setSceneIndex(0);
+      }
     } else {
-      // Starting fresh walkthrough
-      setAttemptsByStory((prev) => ({
-        ...prev,
-        [story.id]: [],
-      }));
       setSceneIndex(0);
     }
+
     setScreen('story');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -121,12 +132,23 @@ export default function App() {
     });
   };
 
+  const handlePreviousScene = () => {
+    soundManager.stopSpeaking();
+    if (sceneIndex > 0) {
+      setSceneIndex((prev) => prev - 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      setScreen('shelf');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
   const handleNextScene = () => {
+    soundManager.stopSpeaking();
     if (sceneIndex + 1 < activeStory.scenes.length) {
       setSceneIndex((prev) => prev + 1);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
-      // Completed all 15 scenes!
       if (!completedStories.includes(activeStory.id)) {
         setCompletedStories((prev) => [...prev, activeStory.id]);
       }
@@ -136,6 +158,7 @@ export default function App() {
   };
 
   const handleReplayStory = () => {
+    soundManager.stopSpeaking();
     setAttemptsByStory((prev) => ({
       ...prev,
       [activeStory.id]: [],
@@ -146,23 +169,27 @@ export default function App() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#F8FAFC] text-slate-900">
-      {/* Strict 3-Zone Top Navigation Bar Contract */}
-      <header className="sticky top-0 z-30 flex items-center justify-between gap-8 px-4 sm:px-6 py-3.5 border-b border-slate-200 bg-white/95 backdrop-blur-md">
-        {/* Zone 1: Single text element wordmark */}
+    <div className="min-h-screen flex flex-col bg-[#FDF8EE] text-stone-900">
+      {/* Top Navigation Bar */}
+      <header className="sticky top-0 z-30 flex items-center justify-between gap-8 px-4 sm:px-6 py-3.5 border-b border-amber-200/80 bg-[#FFFDF8]/95 backdrop-blur-md">
         <button
           type="button"
-          onClick={() => setScreen('shelf')}
+          onClick={() => {
+            soundManager.stopSpeaking();
+            setScreen('shelf');
+          }}
           className="font-serif-display text-lg font-bold tracking-tight text-slate-900 whitespace-nowrap shrink-0 cursor-pointer"
         >
           Summary Walkthrough
         </button>
 
-        {/* Zone 2: 4 concise single-line text navigation links */}
         <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-slate-600">
           <button
             type="button"
-            onClick={() => setScreen('shelf')}
+            onClick={() => {
+              soundManager.stopSpeaking();
+              setScreen('shelf');
+            }}
             className={`hover:text-slate-900 hover:underline underline-offset-4 transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
               screen === 'shelf' ? 'text-slate-900 font-semibold underline' : ''
             }`}
@@ -194,7 +221,6 @@ export default function App() {
           </button>
         </nav>
 
-        {/* Zone 3: 1 primary action */}
         <div className="flex items-center gap-3 shrink-0">
           <button
             type="button"
@@ -206,15 +232,16 @@ export default function App() {
         </div>
       </header>
 
-      {/* Main Screen Content */}
       <main className="flex-1">
         {screen === 'shelf' && (
           <BookshelfScreen
             stories={STORIES}
             selectedStoryId={selectedStoryId}
+            selectedMode={selectedMode}
             completedStoryIds={completedStories}
             storyProgressMap={storyProgressMap}
             onSelectStory={(id) => setSelectedStoryId(id)}
+            onSelectMode={(mode) => setSelectedMode(mode)}
             onStartStory={handleStartStory}
           />
         )}
@@ -223,23 +250,36 @@ export default function App() {
           <InteractiveStoryScreen
             story={activeStory}
             sceneIndex={sceneIndex}
+            mode={selectedMode}
             onRecordSceneOutcome={handleRecordSceneOutcome}
+            onPreviousScene={handlePreviousScene}
             onNextScene={handleNextScene}
-            onBackToShelf={() => setScreen('shelf')}
+            onBackToShelf={() => {
+              soundManager.stopSpeaking();
+              setScreen('shelf');
+            }}
           />
         )}
 
         {screen === 'reflection' && (
           <FinalReflectionScreen
             story={activeStory}
+            mode={selectedMode}
             attemptRecords={attemptsByStory[activeStory.id] || []}
-            onChooseAnotherStory={() => setScreen('shelf')}
+            onBackToLastScene={() => {
+              soundManager.stopSpeaking();
+              setSceneIndex(activeStory.scenes.length - 1);
+              setScreen('story');
+            }}
+            onChooseAnotherStory={() => {
+              soundManager.stopSpeaking();
+              setScreen('shelf');
+            }}
             onReplayStory={handleReplayStory}
           />
         )}
       </main>
 
-      {/* Supporting Modals */}
       <VocabularyBankModal
         isOpen={isVocabBankOpen}
         stories={STORIES}

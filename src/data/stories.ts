@@ -18,6 +18,8 @@ export const STORIES: Story[] = [
   storyJungleBook,
 ];
 
+export type StoryMode = 'quiz' | 'read';
+
 export interface PersonalizedReflectionResult {
   selectedPrompt: DiscussionPromptOption;
   firstTryScore: number;
@@ -31,7 +33,8 @@ export interface PersonalizedReflectionResult {
 
 export function generatePersonalizedReflection(
   story: Story,
-  records: SceneAttemptRecord[]
+  records: SceneAttemptRecord[],
+  mode: StoryMode = 'quiz'
 ): PersonalizedReflectionResult {
   const totalScenes = story.scenes.length;
   const firstTryCorrectRecords = records.filter((r) => r.firstTryCorrect);
@@ -45,7 +48,6 @@ export function generatePersonalizedReflection(
     'Plot & Action',
   ];
 
-  // Count misses and hits per skill category
   const missesBySkill: Record<SkillCategory, number> = {
     'Character & Emotion': 0,
     'Cause & Effect': 0,
@@ -68,7 +70,6 @@ export function generatePersonalizedReflection(
     }
   });
 
-  // Identify strongest skill
   let strongestSkill: SkillCategory = 'Character & Emotion';
   let maxHits = -1;
   categories.forEach((cat) => {
@@ -78,7 +79,6 @@ export function generatePersonalizedReflection(
     }
   });
 
-  // Identify skill with the most hints used (if any)
   let mostMissedSkill: SkillCategory | null = null;
   let maxMisses = 0;
   categories.forEach((cat) => {
@@ -89,18 +89,25 @@ export function generatePersonalizedReflection(
   });
 
   const missedSceneTitles = missedRecords
-    .map((r) => story.scenes.find((s) => s.id === r.sceneId)?.title || `Scene ${r.sceneId}`)
-    .slice(0, 3);
+    .map(
+      (r) =>
+        story.scenes.find((s) => s.id === r.sceneId)?.title ||
+        `Scene ${r.sceneId}`
+    )
+    .slice(0, 2);
 
   const strongSceneTitles = firstTryCorrectRecords
-    .map((r) => story.scenes.find((s) => s.id === r.sceneId)?.title || `Scene ${r.sceneId}`)
-    .slice(0, 3);
+    .map(
+      (r) =>
+        story.scenes.find((s) => s.id === r.sceneId)?.title ||
+        `Scene ${r.sceneId}`
+    )
+    .slice(0, 2);
 
-  // Choose the most appropriate DiscussionPromptOption
   let selectedPrompt: DiscussionPromptOption | undefined;
   let focusSkill: SkillCategory | 'Overall Mastery' = 'Overall Mastery';
 
-  if (mostMissedSkill && maxMisses >= 1 && firstTryScore <= 13) {
+  if (mode === 'quiz' && mostMissedSkill && maxMisses >= 1 && firstTryScore <= 8) {
     focusSkill = mostMissedSkill;
     selectedPrompt =
       story.discussionPrompts.find((p) => p.focusCategory === mostMissedSkill) ||
@@ -108,18 +115,18 @@ export function generatePersonalizedReflection(
   } else {
     focusSkill = 'Overall Mastery';
     selectedPrompt =
-      story.discussionPrompts.find((p) => p.focusCategory === 'Overall Mastery') ||
-      story.discussionPrompts[story.discussionPrompts.length - 1];
+      story.discussionPrompts.find(
+        (p) => p.focusCategory === 'Overall Mastery'
+      ) || story.discussionPrompts[story.discussionPrompts.length - 1];
   }
 
-  // Build a clear, encouraging student-facing explanation of why this question was chosen
   let tailoredExplanation = '';
-  if (missedRecords.length === 0) {
-    tailoredExplanation = `You got all ${totalScenes}/${totalScenes} scenes right on your very first try—especially shining in ${strongestSkill}! Since you mastered every paragraph clue, here is a deeper Big-Idea question to think about.`;
-  } else if (missedRecords.length <= 2) {
-    tailoredExplanation = `You got ${firstTryScore}/${totalScenes} scenes right on the first try (doing great on ${strongSceneTitles[0] || 'key scenes'}) and used a helpful hint on ${missedSceneTitles.join(' and ')}. This question connects what you did right with ${focusSkill.toLowerCase()}.`;
+  if (mode === 'read') {
+    tailoredExplanation = `You read all ${totalScenes} scenes of ${story.title}! Now think about this question in your head.`;
+  } else if (missedRecords.length === 0) {
+    tailoredExplanation = `You got all ${totalScenes}/${totalScenes} scenes right on your first try! Here is a big-idea question to think about.`;
   } else {
-    tailoredExplanation = `You did a solid job working through ${strongSceneTitles[0] || 'the story'} (${firstTryScore}/${totalScenes} first-try matches) and took a second look at ${missedSceneTitles.slice(0, 2).join(' and ')}. This reflection question focuses on ${focusSkill} to help the story stick in your mind!`;
+    tailoredExplanation = `You got ${firstTryScore}/${totalScenes} scenes right on the first try and used a hint on ${missedSceneTitles.join(' and ')}. Here is a question to help you reflect on the story.`;
   }
 
   return {
