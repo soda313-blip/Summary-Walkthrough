@@ -20,6 +20,33 @@ interface InteractiveStoryScreenProps {
   onBackToShelf: () => void;
 }
 
+interface ShuffledChoice {
+  text: string;
+  isCorrect: boolean;
+  originalIndex: number;
+}
+
+function createShuffledChoices(
+  choices: [string, string, string],
+  correctIndex: number
+): ShuffledChoice[] {
+  const items: ShuffledChoice[] = choices.map((text, idx) => ({
+    text,
+    isCorrect: idx === correctIndex,
+    originalIndex: idx,
+  }));
+
+  // Fisher-Yates shuffle
+  for (let i = items.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const temp = items[i];
+    items[i] = items[j];
+    items[j] = temp;
+  }
+
+  return items;
+}
+
 export const InteractiveStoryScreen: React.FC<InteractiveStoryScreenProps> = ({
   story,
   sceneIndex,
@@ -32,6 +59,9 @@ export const InteractiveStoryScreen: React.FC<InteractiveStoryScreenProps> = ({
   const scene: Scene = story.scenes[sceneIndex];
   const totalScenes = story.scenes.length;
 
+  const [shuffledChoices, setShuffledChoices] = useState<ShuffledChoice[]>(() =>
+    createShuffledChoices(scene.choices, scene.correctIndex)
+  );
   const [selectedChoiceIndex, setSelectedChoiceIndex] = useState<number | null>(
     null
   );
@@ -43,10 +73,11 @@ export const InteractiveStoryScreen: React.FC<InteractiveStoryScreenProps> = ({
     useState<ActiveDefinitionItem | null>(null);
   const [isSpeaking, setIsSpeaking] = useState<boolean>(false);
 
-  // Reset local state & stop speech when moving between scenes
+  // Reset local state, reshuffle choices, & stop speech when moving between scenes
   useEffect(() => {
     soundManager.stopSpeaking();
     setIsSpeaking(false);
+    setShuffledChoices(createShuffledChoices(scene.choices, scene.correctIndex));
     setSelectedChoiceIndex(null);
     setWrongIndices([]);
     setIsCorrect(false);
@@ -101,22 +132,25 @@ export const InteractiveStoryScreen: React.FC<InteractiveStoryScreenProps> = ({
     });
   };
 
-  const handleSelectChoice = (index: number) => {
+  const handleSelectChoice = (displayIndex: number) => {
     if (isCorrect) return;
+
+    const chosenItem = shuffledChoices[displayIndex];
+    if (!chosenItem) return;
 
     const nextAttempts = attemptsOnScene + 1;
     setAttemptsOnScene(nextAttempts);
-    setSelectedChoiceIndex(index);
+    setSelectedChoiceIndex(displayIndex);
     setFlashKey((prev) => prev + 1);
 
-    if (index === scene.correctIndex) {
+    if (chosenItem.isCorrect) {
       soundManager.playCorrectChime();
       setIsCorrect(true);
       onRecordSceneOutcome(scene.id, nextAttempts, nextAttempts === 1);
     } else {
       soundManager.playIncorrectNudge();
-      if (!wrongIndices.includes(index)) {
-        setWrongIndices((prev) => [...prev, index]);
+      if (!wrongIndices.includes(displayIndex)) {
+        setWrongIndices((prev) => [...prev, displayIndex]);
       }
     }
   };
@@ -320,11 +354,10 @@ export const InteractiveStoryScreen: React.FC<InteractiveStoryScreenProps> = ({
 
             <div className="mt-5">
               <div className="flex flex-col gap-3">
-                {scene.choices.map((choiceText, idx) => {
+                {shuffledChoices.map((choiceItem, idx) => {
                   const isThisSelected = selectedChoiceIndex === idx;
                   const isThisWrong = wrongIndices.includes(idx);
-                  const isThisRightAndFound =
-                    isCorrect && idx === scene.correctIndex;
+                  const isThisRightAndFound = isCorrect && choiceItem.isCorrect;
 
                   let buttonStyle =
                     'border-slate-200 bg-white text-slate-900 hover:border-slate-400 hover:bg-slate-50';
@@ -346,7 +379,7 @@ export const InteractiveStoryScreen: React.FC<InteractiveStoryScreenProps> = ({
 
                   return (
                     <button
-                      key={idx}
+                      key={`${scene.id}-${choiceItem.originalIndex}`}
                       type="button"
                       onClick={() => handleSelectChoice(idx)}
                       disabled={isCorrect}
@@ -355,7 +388,7 @@ export const InteractiveStoryScreen: React.FC<InteractiveStoryScreenProps> = ({
                       <span className="font-mono text-xs font-semibold mr-1.5">
                         {statePrefix}
                       </span>
-                      <span>{choiceText}</span>
+                      <span>{choiceItem.text}</span>
                     </button>
                   );
                 })}
