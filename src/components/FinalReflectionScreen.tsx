@@ -1,16 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { Award, Volume2, Square, RefreshCw, ArrowLeft } from 'lucide-react';
+import { Award, Volume2, Square, RefreshCw, ArrowLeft, CheckCircle2 } from 'lucide-react';
 import { SceneAttemptRecord, Story } from '../types/story';
 import {
   generatePersonalizedReflection,
   StoryMode,
 } from '../data/stories';
 import { soundManager } from '../utils/soundEffects';
+import { formatDurationMMSS } from '../lib/firebase';
+
+export type ResultSaveStatus = 'idle' | 'saving' | 'saved' | 'error';
 
 interface FinalReflectionScreenProps {
   story: Story;
   mode: StoryMode;
   attemptRecords: SceneAttemptRecord[];
+  durationSeconds: number | null;
+  resultSaveStatus: ResultSaveStatus;
   onBackToLastScene: () => void;
   onChooseAnotherStory: () => void;
   onReplayStory: () => void;
@@ -20,6 +25,8 @@ export const FinalReflectionScreen: React.FC<FinalReflectionScreenProps> = ({
   story,
   mode,
   attemptRecords,
+  durationSeconds,
+  resultSaveStatus,
   onBackToLastScene,
   onChooseAnotherStory,
   onReplayStory,
@@ -67,13 +74,13 @@ export const FinalReflectionScreen: React.FC<FinalReflectionScreenProps> = ({
   };
 
   return (
-    <div className="mx-auto max-w-3xl px-4 sm:px-6 pt-5 pb-20">
+    <div className="mx-auto max-w-3xl px-4 sm:px-6 pt-3 pb-12">
       {/* Top Row: Back Button & Read Aloud */}
-      <div className="mb-4 flex items-center justify-between gap-3">
+      <div className="mb-3 flex items-center justify-between gap-3">
         <button
           type="button"
           onClick={onBackToLastScene}
-          className="inline-flex min-h-[42px] items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs sm:text-sm font-semibold text-slate-800 hover:bg-slate-50 active:scale-[0.98] transition-all cursor-pointer whitespace-nowrap shrink-0"
+          className="inline-flex min-h-[38px] items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs sm:text-sm font-semibold text-slate-800 hover:bg-slate-50 active:scale-[0.98] transition-all cursor-pointer whitespace-nowrap shrink-0"
         >
           <ArrowLeft className="h-4 w-4" />
           <span>Back</span>
@@ -83,7 +90,7 @@ export const FinalReflectionScreen: React.FC<FinalReflectionScreenProps> = ({
           <button
             type="button"
             onClick={handleToggleReadAloud}
-            className="inline-flex min-h-[42px] items-center gap-2 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs sm:text-sm font-semibold text-slate-800 hover:bg-slate-50 active:scale-[0.98] transition-all cursor-pointer whitespace-nowrap shrink-0"
+            className="inline-flex min-h-[38px] items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs sm:text-sm font-semibold text-slate-800 hover:bg-slate-50 active:scale-[0.98] transition-all cursor-pointer whitespace-nowrap shrink-0"
           >
             {isSpeaking ? (
               <>
@@ -101,17 +108,17 @@ export const FinalReflectionScreen: React.FC<FinalReflectionScreenProps> = ({
           <button
             type="button"
             onClick={() => soundManager.playTrumpetFanfare()}
-            className="inline-flex min-h-[42px] items-center gap-1.5 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2 text-xs font-semibold text-slate-800 hover:bg-slate-100 active:scale-[0.98] transition-all whitespace-nowrap shrink-0 cursor-pointer"
+            className="inline-flex min-h-[38px] items-center gap-1.5 rounded-xl border border-slate-200 bg-slate-50 px-3 py-1.5 text-xs font-semibold text-slate-800 hover:bg-slate-100 active:scale-[0.98] transition-all whitespace-nowrap shrink-0 cursor-pointer"
           >
             <span>Trumpet</span>
           </button>
         </div>
       </div>
 
-      <div className="rounded-2xl border border-amber-200/80 bg-[#FFFDF9] p-6 sm:p-8 shadow-xs">
+      <div className="rounded-2xl border border-amber-200/80 bg-[#FFFDF9] p-5 sm:p-6 shadow-xs">
         {/* Story Complete Badge */}
-        <div className="flex items-center gap-3 border-b border-amber-100 pb-5">
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-amber-100 text-amber-800 border border-amber-200">
+        <div className="flex items-center gap-3 border-b border-amber-100 pb-4">
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-amber-100 text-amber-800 border border-amber-200">
             <Award className="h-6 w-6" />
           </div>
           <div>
@@ -125,19 +132,32 @@ export const FinalReflectionScreen: React.FC<FinalReflectionScreenProps> = ({
         </div>
 
         {/* Short Performance Summary */}
-        <div className="mt-5 rounded-xl border border-amber-200/70 bg-[#FDF8EC] p-4">
-          {mode === 'quiz' && (
-            <p className="text-xs font-mono font-semibold text-slate-900 tabular-nums mb-1">
-              Score: {reflection.firstTryScore}/{reflection.totalScenes}
-            </p>
-          )}
+        <div className="mt-4 rounded-xl border border-amber-200/70 bg-[#FDF8EC] p-3.5 sm:p-4">
+          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mb-1">
+            {mode === 'quiz' && (
+              <p className="text-xs font-mono font-semibold text-slate-900 tabular-nums">
+                Score: {reflection.firstTryScore}/{reflection.totalScenes}
+              </p>
+            )}
+            {durationSeconds !== null && (
+              <p className="text-xs font-mono font-semibold text-slate-700 tabular-nums">
+                Time: {formatDurationMMSS(durationSeconds)}
+              </p>
+            )}
+            {resultSaveStatus === 'saved' && (
+              <span className="inline-flex items-center gap-1 text-xs font-medium text-emerald-700">
+                <CheckCircle2 className="h-3.5 w-3.5" />
+                Result saved
+              </span>
+            )}
+          </div>
           <p className="text-sm text-slate-700 leading-relaxed">
             {reflection.tailoredExplanation}
           </p>
         </div>
 
         {/* Notice Banner: "No writing needed!" */}
-        <div className="mt-5 rounded-xl border border-amber-300 bg-amber-50/90 px-4 py-3.5 text-amber-950">
+        <div className="mt-4 rounded-xl border border-amber-300 bg-amber-50/90 px-4 py-3 text-amber-950">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
             <span className="text-sm font-bold tracking-tight">
               No writing needed!
@@ -149,7 +169,7 @@ export const FinalReflectionScreen: React.FC<FinalReflectionScreenProps> = ({
         </div>
 
         {/* Critical Thinking Discussion Question */}
-        <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-5 sm:p-7">
+        <div className="mt-4 rounded-2xl border border-slate-200 bg-white p-4 sm:p-6">
           <div className="flex items-center justify-between gap-2">
             <p className="text-xs font-semibold text-slate-500">
               Discussion Question

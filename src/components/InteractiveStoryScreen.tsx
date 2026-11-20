@@ -196,14 +196,14 @@ export const InteractiveStoryScreen: React.FC<InteractiveStoryScreenProps> = ({
   };
 
   return (
-    <div className="mx-auto max-w-4xl px-4 sm:px-6 pt-4 pb-20">
+    <div className="mx-auto max-w-3xl px-4 sm:px-6 pt-3 pb-10">
       {/* Top Row: Progress Counter (Progress 1/10), Read Aloud, and Back Button */}
-      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-3">
+      <div className="mb-2.5 flex flex-wrap items-center justify-between gap-2">
+        <div className="flex items-center gap-2.5">
           <button
             type="button"
             onClick={onPreviousScene}
-            className="inline-flex min-h-[42px] items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs sm:text-sm font-semibold text-slate-800 hover:bg-slate-50 active:scale-[0.98] transition-all cursor-pointer whitespace-nowrap shrink-0"
+            className="inline-flex min-h-[38px] items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs sm:text-sm font-semibold text-slate-800 hover:bg-slate-50 active:scale-[0.98] transition-all cursor-pointer whitespace-nowrap shrink-0"
           >
             <ArrowLeft className="h-4 w-4" />
             <span>{sceneIndex === 0 ? 'Back to Shelf' : 'Back'}</span>
@@ -218,7 +218,7 @@ export const InteractiveStoryScreen: React.FC<InteractiveStoryScreenProps> = ({
           <button
             type="button"
             onClick={handleToggleReadAloud}
-            className="inline-flex min-h-[42px] items-center gap-2 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs sm:text-sm font-semibold text-slate-800 hover:bg-slate-50 active:scale-[0.98] transition-all cursor-pointer whitespace-nowrap shrink-0"
+            className="inline-flex min-h-[38px] items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs sm:text-sm font-semibold text-slate-800 hover:bg-slate-50 active:scale-[0.98] transition-all cursor-pointer whitespace-nowrap shrink-0"
           >
             {isSpeaking ? (
               <>
@@ -236,7 +236,7 @@ export const InteractiveStoryScreen: React.FC<InteractiveStoryScreenProps> = ({
           <button
             type="button"
             onClick={onBackToShelf}
-            className="min-h-[42px] px-3 py-2 text-xs font-semibold text-slate-600 hover:text-slate-900 rounded-xl hover:bg-slate-100 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+            className="min-h-[38px] px-2.5 py-1.5 text-xs font-semibold text-slate-600 hover:text-slate-900 rounded-xl hover:bg-slate-100 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
           >
             Bookshelf
           </button>
@@ -244,7 +244,7 @@ export const InteractiveStoryScreen: React.FC<InteractiveStoryScreenProps> = ({
       </div>
 
       {/* Slim Progress Bar */}
-      <div className="mb-5 h-1.5 w-full overflow-hidden rounded-full bg-amber-200/70">
+      <div className="mb-3 h-1.5 w-full overflow-hidden rounded-full bg-amber-200/70">
         <div
           className="h-full bg-amber-800 transition-transform duration-300 origin-left"
           style={{
@@ -254,18 +254,20 @@ export const InteractiveStoryScreen: React.FC<InteractiveStoryScreenProps> = ({
       </div>
 
       {/* Main Story Card */}
-      <div className="rounded-2xl border border-amber-200/80 bg-[#FFFDF9] p-4 sm:p-6 shadow-xs">
+      <div className="rounded-2xl border border-amber-200/80 bg-[#FFFDF9] p-3.5 sm:p-5 shadow-xs">
         {/* 1. Scene Illustration (Shown above the paragraph; tappable for definition) */}
-        <SceneIllustration
-          story={story}
-          scene={scene}
-          totalScenes={totalScenes}
-          onTapIllustration={handleOpenIllustrationDefinition}
-        />
+        <div className="mx-auto max-w-xl">
+          <SceneIllustration
+            story={story}
+            scene={scene}
+            totalScenes={totalScenes}
+            onTapIllustration={handleOpenIllustrationDefinition}
+          />
+        </div>
 
         {/* 2. Story Paragraph */}
-        <div className="mt-4 rounded-xl border border-amber-200/70 bg-[#FDF8EC] p-4 sm:p-5">
-          <p className="text-base sm:text-lg leading-relaxed text-slate-900">
+        <div className="mt-3 rounded-xl border border-amber-200/70 bg-[#FDF8EC] p-3.5 sm:p-4">
+          <p className="text-sm sm:text-base leading-relaxed text-slate-900">
             {renderInteractiveParagraph()}{' '}
             {mode === 'read' ? (
               <span>{scene.choices[scene.correctIndex]}</span>
@@ -274,7 +276,7 @@ export const InteractiveStoryScreen: React.FC<InteractiveStoryScreenProps> = ({
                 {scene.choices[scene.correctIndex]}
               </span>
             ) : (
-              <span className="inline-block rounded-md border border-dashed border-slate-400 bg-white px-3 py-0.5 text-sm font-semibold text-slate-500">
+              <span className="inline-block rounded-md border border-dashed border-slate-400 bg-white px-2.5 py-0.5 text-xs sm:text-sm font-semibold text-slate-500">
                 [ Choose the ending sentence below ]
               </span>
             )}
@@ -352,8 +354,8 @@ export const InteractiveStoryScreen: React.FC<InteractiveStoryScreenProps> = ({
               </div>
             )}
 
-            <div className="mt-5">
-              <div className="flex flex-col gap-3">
+            <div className="mt-3.5">
+              <div className="flex flex-col gap-2.5">
                 {shuffledChoices.map((choiceItem, idx) => {
                   const isThisSelected = selectedChoiceIndex === idx;
                   const isThisWrong = wrongIndices.includes(idx);
@@ -383,7 +385,7 @@ export const InteractiveStoryScreen: React.FC<InteractiveStoryScreenProps> = ({
                       type="button"
                       onClick={() => handleSelectChoice(idx)}
                       disabled={isCorrect}
-                      className={`w-full min-h-[54px] rounded-xl border px-4 py-3.5 text-left text-sm sm:text-base leading-snug transition-all duration-150 active:scale-[0.99] cursor-pointer disabled:cursor-default ${buttonStyle}`}
+                      className={`w-full min-h-[46px] rounded-xl border px-3.5 py-2.5 text-left text-sm sm:text-base leading-snug transition-all duration-150 active:scale-[0.99] cursor-pointer disabled:cursor-default ${buttonStyle}`}
                     >
                       <span className="font-mono text-xs font-semibold mr-1.5">
                         {statePrefix}

@@ -236,6 +236,50 @@ const SCENE_ARTWORK_MAP: Record<string, SceneArtworkConfig> = {
     src: '/images/jb_scenes_7_10_1791605854792.jpg',
     quadrant: 'tr',
   },
+
+  // =========================================================================
+  // STORY 6: THE WIZARD OF OZ (Scenes 1-10)
+  // =========================================================================
+  'wizard-oz-1': {
+    src: '/images/hd_woz_1_to_4_1791709118518.jpg',
+    quadrant: 'tl',
+  },
+  'wizard-oz-2': {
+    src: '/images/hd_woz_1_to_4_1791709118518.jpg',
+    quadrant: 'tr',
+  },
+  'wizard-oz-3': {
+    src: '/images/hd_woz_1_to_4_1791709118518.jpg',
+    quadrant: 'bl',
+  },
+  'wizard-oz-4': {
+    src: '/images/hd_woz_1_to_4_1791709118518.jpg',
+    quadrant: 'br',
+  },
+  'wizard-oz-5': {
+    src: '/images/hd_woz_5_to_8_1791709133753.jpg',
+    quadrant: 'tl',
+  },
+  'wizard-oz-6': {
+    src: '/images/hd_woz_5_to_8_1791709133753.jpg',
+    quadrant: 'tr',
+  },
+  'wizard-oz-7': {
+    src: '/images/hd_woz_5_to_8_1791709133753.jpg',
+    quadrant: 'bl',
+  },
+  'wizard-oz-8': {
+    src: '/images/hd_woz_5_to_8_1791709133753.jpg',
+    quadrant: 'br',
+  },
+  'wizard-oz-9': {
+    src: '/images/hd_woz_9_10_1791709145920.jpg',
+    quadrant: 'tl',
+  },
+  'wizard-oz-10': {
+    src: '/images/hd_woz_9_10_1791709145920.jpg',
+    quadrant: 'tr',
+  },
 };
 
 const QUADRANT_POSITION_CLASSES: Record<Quadrant, string> = {

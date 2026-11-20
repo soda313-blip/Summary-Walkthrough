@@ -9,6 +9,7 @@ import { storyTreasureIsland } from './storyTreasureIsland';
 import { storyAliceWonderland } from './storyAliceWonderland';
 import { storyAroundWorld } from './storyAroundWorld';
 import { storyJungleBook } from './storyJungleBook';
+import { storyWizardOz } from './storyWizardOz';
 
 export const STORIES: Story[] = [
   storySecretGarden,
@@ -16,6 +17,7 @@ export const STORIES: Story[] = [
   storyAliceWonderland,
   storyAroundWorld,
   storyJungleBook,
+  storyWizardOz,
 ];
 
 export type StoryMode = 'quiz' | 'read';
